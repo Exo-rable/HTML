@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Mission</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 30%, #8e44ad 60%, #e91e63 100%);
+        font-family: 'Poppins', sans-serif;
+        color: white;
+        cursor: default;
+        animation: wishGlow 10s infinite ease-in-out;
+    }
+    @keyframes wishGlow {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.1) hue-rotate(5deg); }
+    }
+    #space {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+    .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s infinite ease-in-out;
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.2; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.2); }
+    }
+    .heart {
+        position: absolute;
+        color: #ff6b9d;
+        font-size: 20px;
+        animation: float 6s infinite linear;
+        opacity: 0.7;
+    }
+    @keyframes float {
+        0% { transform: translateY(100vh) rotate(0deg); }
+        100% { transform: translateY(-10vh) rotate(360deg); }
+    }
+    .sparkle {
+        animation: sparkle 0.6s ease-out;
+    }
+    @keyframes sparkle {
+        0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+        50% { transform: scale(1.2); box-shadow: 0 0 40px rgba(255, 255, 255, 1); }
+        100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+    }
+    .expand {
+        animation: expand 0.6s ease-out;
+    }
+    @keyframes expand {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+    .shooting-star {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        animation: shoot 3s linear infinite;
+        box-shadow: 0 0 10px white;
+    }
+    .shooting-star::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(to right, transparent, white);
+        transform: rotate(45deg);
+        transform-origin: left center;
+    }
+    @keyframes shoot {
+        0% { transform: translateX(-100px) translateY(-100px); opacity: 1; }
+        100% { transform: translateX(calc(100vw + 100px)) translateY(calc(100vh + 100px)); opacity: 0; }
+    }
+    .planet {
+        border-radius: 50%;
+        position: absolute;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: center;
+        padding: 10px;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .planet:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+    #anu {
+        width: 140px;
+        height: 140px;
+        background: url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80') no-repeat center center;
+        background-size: cover;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: inset -10px -10px 20px rgba(0,0,0,0.3), 0 0 40px rgba(255, 234, 167, 0.6);
+    }
+    #parth {
+        width: 100px;
+        height: 100px;
+        background: url('https://images.unsplash.com/photo-1573588028698-f4759befb276?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80') no-repeat center center;
+        background-size: cover;
+        position: absolute;
+        top: 70%;
+        left: 70%;
+        box-shadow: inset -5px -5px 10px rgba(0,0,0,0.4), 0 0 30px rgba(255, 118, 117, 0.5);
+    }
+    #rocket {
+        position: absolute;
+        font-size: 40px;
+        display: none;
+        z-index: 10;
+    }
+    #popup {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(26, 26, 46, 0.95);
+        padding: 30px;
+        border-radius: 20px;
+        width: 85%;
+        max-width: 400px;
+        display: none;
+        text-align: center;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    #message {
+        font-family: 'Dancing Script', cursive;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #ffeaa7;
+    }
+    #close {
+        margin-top: 15px;
+        background: linear-gradient(45deg, #74b9ff, #0984e3);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+    }
+    #close:hover {
+        transform: scale(1.05);
+    }
+    audio {
+        display: none;
+    }
+</style>
+</head>
+<body>
+<audio id="bgMusic" loop autoplay>
+    <source src="https://cdn.pixabay.com/download/audio/2025/08/17/audio_f499499df2.mp3?filename=classical-strings-violin-music-390837.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+<div id="space">
+    <div id="anu" class="planet">Moon Anu</div>
+    <div id="parth" class="planet">Mars Parth</div>
+    <div id="rocket">🚀</div>
+</div>
+
+<div id="popup">
+    <div id="message"></div>
+    <button id="close">Close</button>
+</div>
+
+<script>
+// Generate stars
+function createStars() {
+    const space = document.getElementById('space');
+    for (let i = 0; i < 200; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.width = Math.random() * 3 + 1 + 'px';
+        star.style.height = star.style.width;
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        space.appendChild(star);
+    }
+}
+
+// Generate shooting stars
+function createShootingStars() {
+    const space = document.getElementById('space');
+    setInterval(() => {
+        const star = document.createElement('div');
+        star.className = 'shooting-star';
+        star.style.top = Math.random() * 50 + '%';
+        star.style.left = '-10px';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        space.appendChild(star);
+        setTimeout(() => star.remove(), 4000);
+    }, 3000);
+}
+
+const messages = {
+    "anu": `
+<b>Happy Birthday My Commander, Partner, and my dearest Anu ❤️</b><br><br>
+From earth to your planet, your friendship made the universe lighter for my world 🫂<br><br>
+Stay blessed and happy forever 🧿<br><br>
+Always in touch with my planet — Parth ❤️<br><br>
+<i>If the world ever ends, your bestfriend is always with you.</i><br>
+<b>With love, Parth 🫂❤️🧿🎂</b>
+`,
+    "parth": `
+Every universe needs a balance.<br>
+Thanks for orbiting mine as a true friend 🌍💫<br>
+— Parth
+`
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    createStars();
+    createHearts();
+    createShootingStars();
+    document.getElementById('bgMusic').play();
+});
+
+// Generate floating hearts
+function createHearts() {
+    const space = document.getElementById('space');
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = Math.random() > 0.5 ? '💖' : '✨';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        space.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+    }, 1000);
+}
+
+function launchRocket(from, to) {
+    const rocket = document.getElementById('rocket');
+    const fromRect = from.getBoundingClientRect();
+    const toRect = to.getBoundingClientRect();
+    const startX = fromRect.left + fromRect.width / 2 - 30; // center minus half width
+    const startY = fromRect.top + fromRect.height / 2 - 15;
+    const endX = toRect.left + toRect.width / 2 - 30;
+    const endY = toRect.top + toRect.height / 2 - 15;
+    
+    rocket.style.left = startX + 'px';
+    rocket.style.top = startY + 'px';
+    rocket.style.display = 'block';
+    
+    // Calculate angle
+    const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+    rocket.style.transform = `rotate(${angle}deg)`;
+    
+    // Animate to end
+    rocket.style.transition = 'all 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    setTimeout(() => {
+        rocket.style.left = endX + 'px';
+        rocket.style.top = endY + 'px';
+    }, 10);
+    
+    // On end
+    rocket.addEventListener('transitionend', () => {
+        showMessage(to.id);
+        rocket.style.display = 'none';
+        rocket.style.transition = '';
+    }, { once: true });
+}
+
+document.getElementById("anu").onclick = () => {
+    const anu = document.getElementById('anu');
+    const parth = document.getElementById('parth');
+    launchRocket(parth, anu);
+    anu.classList.add('expand');
+    setTimeout(() => anu.classList.remove('expand'), 600);
+};
+
+document.getElementById("parth").onclick = () => {
+    const anu = document.getElementById('anu');
+    const parth = document.getElementById('parth');
+    launchRocket(anu, parth);
+    parth.classList.add('expand');
+    setTimeout(() => parth.classList.remove('expand'), 600);
+};
+
+function showMessage(type){
+    document.getElementById("message").innerHTML = messages[type];
+    document.getElementById("popup").style.display="block";
+}
+document.getElementById("close").onclick=()=>{
+    document.getElementById("popup").style.display="none";
+}
+</script>
+</body>
+</html>
